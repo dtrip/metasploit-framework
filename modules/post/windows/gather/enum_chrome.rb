@@ -6,7 +6,7 @@
 require 'msf/core'
 require 'rex'
 
-class Metasploit3 < Msf::Post
+class MetasploitModule < Msf::Post
 
   include Msf::Post::File
   include Msf::Post::Windows::Priv
@@ -311,7 +311,7 @@ class Metasploit3 < Msf::Post
     else
       uid = session.sys.config.getuid
       print_status "Running as user '#{uid}'..."
-      usernames << env_vars['USERNAME'].strip
+      usernames << env_vars['USERNAME'].strip if env_vars['USERNAME']
     end
 
     has_sqlite3 = true

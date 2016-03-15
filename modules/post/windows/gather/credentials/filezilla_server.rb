@@ -7,7 +7,7 @@ require 'msf/core'
 require 'rex'
 require 'rexml/document'
 
-class Metasploit3 < Msf::Post
+class MetasploitModule < Msf::Post
 
   include Msf::Post::File
 
@@ -68,7 +68,7 @@ class Metasploit3 < Msf::Post
     end
 
     if !paths.empty?
-      print_good("Found FileZilla Server on #{sysinfo['Computer']} via session ID: #{datastore['SESSION']}")
+      print_good("Found FileZilla Server on #{sysinfo['Computer']} via session ID: #{session.sid}")
       print_line
       return paths
     end
