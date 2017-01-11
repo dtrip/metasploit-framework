@@ -21,6 +21,7 @@ Feature: Help command
           getg          Gets the value of a global variable
           grep          Grep the output of another command
           help          Help menu
+          history       Show command history
           irb           Drop into irb scripting mode
           load          Load a framework plugin
           quit          Exit the console
@@ -45,7 +46,7 @@ Feature: Help command
           -------       -----------
           advanced      Displays advanced options for one or more modules
           back          Move back from the current context
-          edit          Edit the current module with $VISUAL or $EDITOR
+          edit          Edit the current module with the preferred editor
           info          Displays information about one or more modules
           loadpath      Searches for and loads modules from a path
           options       Displays global options or for one or more modules
