@@ -2,16 +2,12 @@
 
 # During build, the Gemfile is temporarily moved and
 # we must manually define the project root
-if ENV['MSF_ROOT'] || ENV['RAILS_ENV']
+if ENV['MSF_ROOT']
   lib = File.realpath(File.expand_path('lib', ENV['MSF_ROOT']))
-  files = `git ls-files`.split($/).reject { |file|
-    file =~ /^documentation|^data\/gui|^external/
-  }
 else
-  # have to use realpath as metasploit-framework is often loaded through a
-  # symlink and tools like Coverage and debuggers require realpaths.
+  # have to use realpath as metasploit-framework is often loaded through a symlink and tools like Coverage and debuggers
+  # require realpaths.
   lib = File.realpath(File.expand_path('../lib', __FILE__))
-  files = []
 end
 
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
@@ -28,8 +24,10 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://www.metasploit.com'
   spec.license       = 'BSD-3-clause'
 
-  spec.files         = files
-  spec.bindir        = '.'
+  spec.files         = `git ls-files`.split($/).reject { |file|
+    file =~ /^documentation|^data\/gui|^external/
+  }
+  spec.bindir = '.'
   if ENV['CREATE_BINSTUBS']
     spec.executables   = [
       'msfconsole',
@@ -67,9 +65,9 @@ Gem::Specification.new do |spec|
   # are needed when there's no database
   spec.add_runtime_dependency 'metasploit-model'
   # Needed for Meterpreter
-  spec.add_runtime_dependency 'metasploit-payloads', '1.2.16'
+  spec.add_runtime_dependency 'metasploit-payloads', '1.2.19'
   # Needed for the next-generation POSIX Meterpreter
-  spec.add_runtime_dependency 'metasploit_payloads-mettle', '0.1.7'
+  spec.add_runtime_dependency 'metasploit_payloads-mettle', '0.1.8'
   # Needed by msfgui and other rpc components
   spec.add_runtime_dependency 'msgpack'
   # get list of network interfaces, like eth* from OS.
@@ -108,6 +106,7 @@ Gem::Specification.new do |spec|
   # Protocol Libraries
   #
   spec.add_runtime_dependency 'net-ssh'
+  spec.add_runtime_dependency 'ruby_smb'
 
   #
   # REX Libraries
