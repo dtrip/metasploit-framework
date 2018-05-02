@@ -207,7 +207,7 @@ class Db
         if names.first == Msf::DBManager::Workspace::DEFAULT_WORKSPACE_NAME
           print_status("Recreated default workspace")
         end
-      rescue Exception => e
+      rescue => e
         print_error "Failed to rename workspace: #{e.message}"
         e.backtrace.each { |line| print_error "#{line}"}
       end
@@ -544,7 +544,7 @@ class Db
     when mode == [:tag]
       begin
         add_host_tag(host_ranges, tag_name)
-      rescue ::Exception => e
+      rescue => e
         if e.message.include?('Validation failed')
           print_error(e.message)
         else
@@ -1056,7 +1056,7 @@ class Db
         return
       end
 
-      if types && types.size != 1
+      if types.nil? || types.size != 1
         print_error("Exactly one type is required")
         return
       end
@@ -1078,12 +1078,12 @@ class Db
     end
 
     if mode == :update
-      if types && types.size != 1
+      if !types.nil? && types.size != 1
         print_error("Exactly one type is required")
         return
       end
 
-      if !types && !data
+      if types.nil? && data.nil?
         print_error("Update requires data or type")
         return
       end
@@ -1119,18 +1119,18 @@ class Db
       if mode == :update
         begin
           update_opts = {id: note.id}
-          if types
+          unless types.nil?
             note.ntype = types.first
             update_opts[:ntype] = types.first
           end
 
-          if data
+          unless data.nil?
             note.data = data
             update_opts[:data] = data
           end
 
           framework.db.update_note(update_opts)
-        rescue Exception => e
+        rescue => e
           elog "There was an error updating note with ID #{note.id}: #{e.message}"
           next
         end
@@ -1333,7 +1333,7 @@ class Db
           end
           loot.ltype = types.first if types
           framework.db.update_loot(loot.as_json.symbolize_keys)
-        rescue Exception => e
+        rescue => e
           elog "There was an error updating loot with ID #{loot.id}: #{e.message}"
           next
         end
@@ -1994,7 +1994,7 @@ class Db
       framework.db.register_data_service(remote_data_service)
       print_line "Registered data service: #{remote_data_service.name}"
       framework.db.workspace = framework.db.default_workspace
-    rescue Exception => e
+    rescue => e
       print_error "There was a problem registering the remote data service: #{e.message}"
     end
   end
@@ -2004,7 +2004,7 @@ class Db
       data_service = framework.db.set_data_service(service_id)
       framework.db.workspace = framework.db.default_workspace
       data_service
-    rescue Exception => e
+    rescue => e
       print_error "Unable to set data service: #{e.message}"
     end
   end
