@@ -97,6 +97,12 @@ module System
       system_data[:distro] = "gentoo"
       system_data[:version] = version
 
+    # Openwall
+    elsif etc_files.include?("owl-release")
+      version = read_file("/etc/owl-release").gsub(/\n|\\n|\\l/,'')
+      system_data[:distro] = 'openwall'
+      system_data[:version] = version
+
     # Generic
     elsif etc_files.include?("issue")
       version = read_file("/etc/issue").gsub(/\n|\\n|\\l/,'')
@@ -126,7 +132,8 @@ module System
   # @param findpath The path on the system to start searching
   # @return [Array]
   def get_suid_files(findpath = '/')
-    cmd_exec("find #{findpath} -perm -4000 -print -xdev").to_s.split("\n")
+    out = cmd_exec("find #{findpath} -perm -4000 -print -xdev").to_s.split("\n")
+    out.delete_if {|i| i.include? 'Permission denied'}
   rescue
     raise "Could not retrieve all SUID files"
   end
