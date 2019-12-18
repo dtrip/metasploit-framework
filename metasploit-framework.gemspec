@@ -52,8 +52,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'activesupport', *Metasploit::Framework::RailsVersionConstraint::RAILS_VERSION
   # Needed for config.action_view for view plugin compatibility for Pro
   spec.add_runtime_dependency 'actionpack', *Metasploit::Framework::RailsVersionConstraint::RAILS_VERSION
-  # Backports Ruby features across language versions
-  spec.add_runtime_dependency 'backports'
   # Needed for some admin modules (cfme_manageiq_evm_pass_reset.rb)
   spec.add_runtime_dependency 'bcrypt', '3.1.12'
   # Needed for Javascript obfuscation
@@ -205,6 +203,10 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'aws-sdk-s3'
   spec.add_runtime_dependency 'aws-sdk-ec2'
   spec.add_runtime_dependency 'aws-sdk-iam'
+
+  # Needed for WebSocket Support
+  spec.add_runtime_dependency 'faye-websocket'
+  spec.add_runtime_dependency 'eventmachine'
 
   # Earlier than latest Faraday gem is used to prevent upstream Octokit errors
   spec.add_runtime_dependency 'faraday', '<= 0.17.0'
