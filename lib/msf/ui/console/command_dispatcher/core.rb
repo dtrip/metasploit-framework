@@ -754,7 +754,7 @@ class Core
         print_status("Successfully loaded plugin: #{inst.name}")
       end
     rescue ::Exception => e
-      elog("Error loading plugin #{path}: #{e}\n\n#{e.backtrace.join("\n")}", 'core', 0, caller)
+      elog("Error loading plugin #{path}: #{e}\n\n#{e.backtrace.join("\n")}", 'core', 0)
       print_error("Failed to load plugin from #{path}: #{e}")
     end
   end
@@ -1511,7 +1511,9 @@ class Core
     print_line "If both are omitted, print options that are currently set."
     print_line
     print_line "If run from a module context, this will set the value in the module's"
-    print_line "datastore.  Use -g to operate on the global datastore"
+    print_line "datastore.  Use -g to operate on the global datastore."
+    print_line
+    print_line "If setting a PAYLOAD, this command can take an index from `show payloads'."
     print_line
   end
 
@@ -1575,14 +1577,17 @@ class Core
     name  = args[0]
     value = args[1, args.length-1].join(' ')
 
-    # Set PAYLOAD by index
+    # Set PAYLOAD
     if name.upcase == 'PAYLOAD' && active_module && (active_module.exploit? || active_module.evasion?)
+      value = trim_path(value, 'payload')
+
       index_from_list(payload_show_results, value) do |mod|
         return false unless mod && mod.respond_to?(:first)
 
         # [name, class] from payload_show_results
         value = mod.first
       end
+
     end
 
     # If the driver indicates that the value is not valid, bust out.
