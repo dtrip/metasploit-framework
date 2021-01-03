@@ -113,7 +113,7 @@ class MetasploitModule < Msf::Auxiliary
         unless info.key? :auth_domain
           begin
             simple.client.authenticate
-          rescue RubySMB::RubySMBError
+          rescue RubySMB::Error::RubySMBError
             info[:auth_domain] = nil
           else
             info[:auth_domain] = simple.client.default_domain
@@ -237,7 +237,7 @@ class MetasploitModule < Msf::Auxiliary
               temp_workgroup.each_char do |i|
                 begin
                   desc << i.encode('UTF-8')
-                rescue Encoding::UndefinedConversionError # rubocop:disable Metrics/BlockNesting
+                rescue ::Encoding::UndefinedConversionError # rubocop:disable Metrics/BlockNesting
                   desc << '?'
                 end
               end

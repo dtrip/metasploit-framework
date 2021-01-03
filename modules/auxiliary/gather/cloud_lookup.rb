@@ -3,7 +3,6 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core/exploit/dns'
 
 class MetasploitModule < Msf::Auxiliary
   include Msf::Exploit::Remote::DNS::Enumeration
@@ -22,7 +21,7 @@ class MetasploitModule < Msf::Auxiliary
           More precisely, this module uses multiple data sources (in order ViewDNS.info, DNS enumeration
           and Censys) to collect assigned (or have been assigned) IP addresses from the targeted site or domain
           that uses the following:
-            * Amazon Cloudflare, Amazon CloudFront, ArvanCloud, Envoy Proxy, Fastly, Stackpath Fireblade,
+            * Cloudflare, Amazon CloudFront, ArvanCloud, Envoy Proxy, Fastly, Stackpath Fireblade,
               Stackpath MaxCDN, Imperva Incapsula, InGen Security (BinarySec EasyWAF), KeyCDN, Microsoft AzureCDN,
               Netlify and Sucuri.
         },
@@ -36,8 +35,8 @@ class MetasploitModule < Msf::Auxiliary
         'License' => MSF_LICENSE,
         'Actions' => [
           ['Automatic', {}],
-          ['Amazon CloudFlare', {
-            'Description' => 'Cloud based Web application firewall of Amazon',
+          ['CloudFlare', {
+            'Description' => 'Cloudflare provides SaaS based CDN, WAF, DNS and DDoS mitigation services.',
             'Signatures' => ['server: cloudflare']
           }],
           ['Amazon CloudFront', {
@@ -313,7 +312,7 @@ class MetasploitModule < Msf::Auxiliary
         begin
           # Searches for the chain to compare in the defined tag.
           found = true if html.at(datastore['TAG']).to_s.include? fingerprint.to_s.encode('utf-8')
-        rescue NoMethodError, Encoding::CompatibilityError
+        rescue NoMethodError, ::Encoding::CompatibilityError
           return false
         end
 
@@ -333,7 +332,7 @@ class MetasploitModule < Msf::Auxiliary
         vprint_line("      --> responded with HTTP status code: #{response.code} to #{response.headers['location']}")
         begin
           found = true if response.headers['location'].include?(datastore['hostname'])
-        rescue NoMethodError, Encoding::CompatibilityError
+        rescue NoMethodError, ::Encoding::CompatibilityError
           return false
         end
 
